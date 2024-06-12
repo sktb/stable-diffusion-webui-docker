@@ -2,8 +2,9 @@ x-base_service: &base_service
     ports:
       - "${WEBUI_PORT:-7860}:7860"
     volumes:
-      - &v1 ./data:/data
-      - &v2 ./output:/output
+      - &v1 d:/ai/models:/models
+      - &v2 d:/ai/output:/output
+      - &v3 d:/ai/config:/config
     stop_signal: SIGKILL
     tty: true
     deploy:

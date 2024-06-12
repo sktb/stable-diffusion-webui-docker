@@ -3,46 +3,46 @@
 set -Eeuo pipefail
 
 # TODO: move all mkdir -p ?
-mkdir -p /data/config/auto/scripts/
+mkdir -p /config/auto/scripts/
 # mount scripts individually
 
 echo $ROOT
 ls -lha $ROOT
 
 find "${ROOT}/scripts/" -maxdepth 1 -type l -delete
-cp -vrfTs /data/config/auto/scripts/ "${ROOT}/scripts/"
+cp -vrfTs /config/auto/scripts/ "${ROOT}/scripts/"
 
 # Set up config file
-python /docker/config.py /data/config/auto/config.json
+python /docker/config.py /config/auto/config.json
 
-if [ ! -f /data/config/auto/ui-config.json ]; then
-  echo '{}' >/data/config/auto/ui-config.json
+if [ ! -f /config/auto/ui-config.json ]; then
+  echo '{}' >/config/auto/ui-config.json
 fi
 
-if [ ! -f /data/config/auto/styles.csv ]; then
-  touch /data/config/auto/styles.csv
+if [ ! -f /config/auto/styles.csv ]; then
+  touch /config/auto/styles.csv
 fi
 
 # copy models from original models folder
-mkdir -p /data/models/VAE-approx/ /data/models/karlo/
+mkdir -p /models/VAE-approx/ /models/karlo/
 
-rsync -a --info=NAME ${ROOT}/models/VAE-approx/ /data/models/VAE-approx/
-rsync -a --info=NAME ${ROOT}/models/karlo/ /data/models/karlo/
+rsync -a --info=NAME ${ROOT}/models/VAE-approx/ /models/VAE-approx/
+rsync -a --info=NAME ${ROOT}/models/karlo/ /models/karlo/
 
 declare -A MOUNTS
 
-MOUNTS["/root/.cache"]="/data/.cache"
-MOUNTS["${ROOT}/models"]="/data/models"
+MOUNTS["/root/.cache"]="/models/.cache"
+MOUNTS["${ROOT}/models"]="/models"
 
-MOUNTS["${ROOT}/embeddings"]="/data/embeddings"
-MOUNTS["${ROOT}/config.json"]="/data/config/auto/config.json"
-MOUNTS["${ROOT}/ui-config.json"]="/data/config/auto/ui-config.json"
-MOUNTS["${ROOT}/styles.csv"]="/data/config/auto/styles.csv"
-MOUNTS["${ROOT}/extensions"]="/data/config/auto/extensions"
-MOUNTS["${ROOT}/config_states"]="/data/config/auto/config_states"
+MOUNTS["${ROOT}/embeddings"]="/models/embeddings"
+MOUNTS["${ROOT}/config.json"]="/config/auto/config.json"
+MOUNTS["${ROOT}/ui-config.json"]="/config/auto/ui-config.json"
+MOUNTS["${ROOT}/styles.csv"]="/config/auto/styles.csv"
+MOUNTS["${ROOT}/extensions"]="/config/auto/extensions"
+MOUNTS["${ROOT}/config_states"]="/config/auto/config_states"
 
 # extra hacks
-MOUNTS["${ROOT}/repositories/CodeFormer/weights/facelib"]="/data/.cache"
+MOUNTS["${ROOT}/repositories/CodeFormer/weights/facelib"]="/models/.cache"
 
 for to_path in "${!MOUNTS[@]}"; do
   set -Eeuo pipefail
@@ -75,10 +75,10 @@ for installscript in "${list[@]}"; do
   PYTHONPATH=${ROOT} python "$installscript"
 done
 
-if [ -f "/data/config/auto/startup.sh" ]; then
+if [ -f "/config/auto/startup.sh" ]; then
   pushd ${ROOT}
   echo "Running startup script"
-  . /data/config/auto/startup.sh
+  . /config/auto/startup.sh
   popd
 fi
 

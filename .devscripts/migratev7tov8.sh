@@ -5,24 +5,24 @@ set -Eeuo pipefail
 echo "Renaming..."
 
 # compatible with default auto-names
-mv -v ./data/StableDiffusion ./data/Stable-diffusion
-mv -v ./data/Deepdanbooru ./data/torch_deepdanbooru
+mv -v ./models/StableDiffusion ./models/Stable-diffusion
+mv -v ./models/Deepdanbooru ./models/torch_deepdanbooru
 
 # casing problem on windows
-mv -v ./data/Hypernetworks ./data/hypernetworks1
-mv -v ./data/hypernetworks1 ./data/hypernetworks
+mv -v ./models/Hypernetworks ./models/hypernetworks1
+mv -v ./models/hypernetworks1 ./models/hypernetworks
 
-mv -v ./data/MiDaS ./data/midas1
-mv -v ./data/midas1 ./data/midas
+mv -v ./models/MiDaS ./models/midas1
+mv -v ./models/midas1 ./models/midas
 
 
 echo "Moving folders..."
 
 mkdir -pv ./final
 
-mv -v ./data/config ./final/config
-mv -v ./data/.cache ./final/.cache
-mv -v ./data/embeddings ./final/embeddings
+mv -v ./config ./final/config
+mv -v ./models/.cache ./final/.cache
+mv -v ./models/embeddings ./final/embeddings
 mv -v ./data ./final/models
 
 mv -v ./final ./data
