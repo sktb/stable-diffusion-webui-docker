@@ -3,6 +3,7 @@
 set -Eeuo pipefail
 
 mkdir -vp /config/comfy/custom_nodes
+mkdir -vp /usr/share/fonts/truetype
 
 declare -A MOUNTS
 

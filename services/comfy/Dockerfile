@@ -2,15 +2,19 @@ FROM pytorch/pytorch:2.3.0-cuda12.1-cudnn8-runtime
 
 ENV DEBIAN_FRONTEND=noninteractive PIP_PREFER_BINARY=1
 
-RUN apt-get update && apt-get install -y git && apt-get clean
+RUN apt-get update && apt-get install -y git ffmpeg libsm6 libxext6 && apt-get clean
 
 ENV ROOT=/stable-diffusion
 RUN --mount=type=cache,target=/root/.cache/pip \
   git clone https://github.com/comfyanonymous/ComfyUI.git ${ROOT} && \
   cd ${ROOT} && \
   git checkout master && \
-  git reset --hard 276f8fce9f5a80b500947fb5745a4dde9e84622d && \
-  pip install -r requirements.txt
+# git reset --hard 276f8fce9f5a80b500947fb5745a4dde9e84622d && \
+  pip install -r requirements.txt && \
+  pip install piexif diffusers pydantic opencv-python simpleeval matplotlib scikit-image ollama
+
+# RUN git clone https://github.com/ltdrdata/ComfyUI-Manager ${ROOT}/custom_nodes/ComfyUI-Manager && \
+#   pip install -r ${ROOT}/custom_nodes/ComfyUI-Manager/requirements.txt
 
 WORKDIR ${ROOT}
 COPY . /docker/

@@ -5,6 +5,7 @@ x-base_service: &base_service
       - &v1 d:/ai/models:/models
       - &v2 d:/ai/output:/output
       - &v3 d:/ai/config:/config
+      - &v4 d:/ai/comfy-config:/data/config
     stop_signal: SIGKILL
     tty: true
     deploy:
